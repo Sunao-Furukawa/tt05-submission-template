@@ -8,7 +8,7 @@ module tt_um_sunaofurukawa_cpu_8bit (
     output wire [7:0] uio_out,
     output wire [7:0] uio_oe,
     input wire [7:0] in8bit,
-    output reg [7:0] out8bit
+    output wire [7:0] out8bit
 );
 
     // Define the instruction set
@@ -37,7 +37,7 @@ module tt_um_sunaofurukawa_cpu_8bit (
                 NOT: regA <= ~regA;
             endcase
         end
-        out8bit <= regA;
     end
+    assign out8bit = regA;
 
 endmodule
