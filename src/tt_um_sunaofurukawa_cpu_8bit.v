@@ -1,6 +1,7 @@
 module tt_um_sunaofurukawa_cpu_8bit (
     input wire clk,
     input wire rst_n,
+    input wire ena,
     input wire [7:0] in8bit,
     output reg [7:0] out8bit
 );
