@@ -7,9 +7,6 @@ module tt_um_sunaofurukawa_cpu_8bit (
     output wire [7:0] uio_out,  // IOs: Output path
     output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
     input  wire       ena,      // will go high when the design is enabled
-    
-    input wire [7:0] in8bit,
-    output wire [7:0] out8bit
 );
 
     // Define the instruction set
