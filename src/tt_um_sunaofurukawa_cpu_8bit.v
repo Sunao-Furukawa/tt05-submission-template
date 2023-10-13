@@ -1,6 +1,13 @@
 module tt_um_sunaofurukawa_cpu_8bit (
     input wire clk,
     input wire rst_n,
+    input  wire [7:0] ui_in,    // Dedicated inputs
+    output wire [7:0] uo_out,   // Dedicated outputs
+    input  wire [7:0] uio_in,   // IOs: Input path
+    output wire [7:0] uio_out,  // IOs: Output path
+    output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
+    input  wire       ena,      // will go high when the design is enabled
+    
     input wire [7:0] in8bit,
     output wire [7:0] out8bit
 );
@@ -21,17 +28,21 @@ module tt_um_sunaofurukawa_cpu_8bit (
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             regA <= 8'b0;
-        end else begin
-            instruction <= in8bit[3:0];
+        end else if (ena == 1'b1) begin
+            instruction <= ui_in[3:0];
             case (instruction)
-                ADD: regA <= regA + in8bit[7:4];
-                SUB: regA <= regA - in8bit[7:4];
-                AND: regA <= regA & in8bit[7:4];
-                OR: regA <= regA | in8bit[7:4];
+                ADD: regA <= regA + ui_in[7:4];
+                SUB: regA <= regA - ui_in[7:4];
+                AND: regA <= regA & ui_in[7:4];
+                OR: regA <= regA | ui_in[7:4];
                 NOT: regA <= ~regA;
             endcase
         end
     end
-    assign out8bit = regA;
+    // Disable all bidir outputs: make them inputs only:
+    assign uio_oe = 8'b00000000;
+    // The following will never be used, but satisfies the synthesis of output drivers anyway:
+    assign uio_out = 8'd0;
+    assign uo_out = regA;
 
 endmodule
